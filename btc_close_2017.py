@@ -40,7 +40,7 @@ line_chart.add('log收盘价', close_log)
 line_chart.render_to_file('收盘价折线图（￥）.svg')
 
 
-def draw_line(x_data, y_data, title, y_legend):# 收盘价均值
+def draw_line(x_data, y_data, title, y_legend):
     xy_map = []
     for x, y in groupby(sorted(zip(x_data, y_data)), key=lambda _: _[0]):
         y_list = [v for _, v in y]
@@ -57,3 +57,13 @@ def draw_line(x_data, y_data, title, y_legend):# 收盘价均值
 idx_month = dates.index('2017-12-01')
 line_chart_month = draw_line(months[:idx_month], close[:idx_month], '收盘价月日均值（￥）', '月日均值')
 line_chart_month
+
+idx_week= dates.index('2017-12-11')
+line_chart_week = draw_line(weeks[1:idx_week], close[1:idx_week], '收盘价周日均值（￥）', '周日均值')
+line_chart_week
+
+with open('收盘价dashboard.html', 'w', encoding='utf8') as html_file:
+    html_file.write('<html><head><title>收盘价Dashboard</title><metacharset="utf-8"></head><body>\n')
+    for svg in ['收盘价折线图（￥）.svg', '收盘价周日均值（￥）.svg', '收盘价月日均值（￥）.svg']:
+        html_file.write('   <object type="image/svg+xml"data="{0}"height=500></object>\n'.format(svg))
+    html_file.write('</body></html>')
